@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpiritX 2026 Configuration</title>
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #0a0a1a;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        h1 {
+            color: #5d8cff;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .config-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #16162d;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(93, 140, 255, 0.2);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #5d8cff;
+            font-weight: bold;
+        }
+        
+        input[type="datetime-local"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #2a2a4a;
+            border-radius: 5px;
+            background-color: #1e1e38;
+            color: #ffffff;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #2a2a4a;
+            border-radius: 5px;
+            background-color: #1e1e38;
+            color: #ffffff;
+        }
+        
+        button {
+            background-color: #5d8cff;
+            color: #ffffff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            display: block;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #4a70cc;
+        }
+        
+        .success-message {
+            color: #4dff88;
+            text-align: center;
+            margin-top: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="config-container">
+        <h1>SpiritX 2026 Configuration</h1>
+        
+        <form id="config-form">
+            <div class="form-group">
+                <label for="event-date">Event Date and Time:</label>
+                <input type="datetime-local" id="event-date" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="event-message">Post-countdown Message:</label>
+                <input type="text" id="event-message" placeholder="The future is now." value="The future is now.">
+            </div>
+            
+            <button type="submit">Save Configuration</button>
+        </form>
+        
+        <div id="success-message" class="success-message">
+            Configuration saved successfully!
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set default date (January 1, 2026)
+            const defaultDate = new Date('2026-01-01T00:00:00');
+            const dateInput = document.getElementById('event-date');
+            
+            // Format date for input
+            const year = defaultDate.getFullYear();
+            const month = String(defaultDate.getMonth() + 1).padStart(2, '0');
+            const day = String(defaultDate.getDate()).padStart(2, '0');
+            const hours = String(defaultDate.getHours()).padStart(2, '0');
+            const minutes = String(defaultDate.getMinutes()).padStart(2, '0');
+            
+            dateInput.value = `${year}-${month}-${day}T${hours}:${minutes}`;
+            
+            // Load saved configuration if exists
+            const savedDate = localStorage.getItem('spiritx-countdown-date');
+            const savedMessage = localStorage.getItem('spiritx-countdown-message');
+            
+            if (savedDate) {
+                dateInput.value = savedDate;
+            }
+            
+            if (savedMessage) {
+                document.getElementById('event-message').value = savedMessage;
+            }
+            
+            // Handle form submission
+            document.getElementById('config-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const eventDate = document.getElementById('event-date').value;
+                const eventMessage = document.getElementById('event-message').value;
+                
+                // Save to localStorage
+                localStorage.setItem('spiritx-countdown-date', eventDate);
+                localStorage.setItem('spiritx-countdown-message', eventMessage);
+                
+                // Show success message
+                const successMessage = document.getElementById('success-message');
+                successMessage.style.display = 'block';
+                
+                // Hide success message after 3 seconds
+                setTimeout(function() {
+                    successMessage.style.display = 'none';
+                }, 3000);
+            });
+        });
+    </script>
+</body>
+</html>
